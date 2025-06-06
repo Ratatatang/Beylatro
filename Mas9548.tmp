@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkxe6giqbs0oj"]
+
+[ext_resource type="Script" path="res://Master.gd" id="1_imjb1"]
+[ext_resource type="Texture2D" uid="uid://cg4fehe6s315l" path="res://HexTiles.png" id="2_q2kbt"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1ncv1"]
+texture = ExtResource("2_q2kbt")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+3:1/0 = 0
+2:1/0 = 0
+5:1/0 = 0
+4:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_26eaa"]
+tile_shape = 3
+tile_offset_axis = 1
+tile_size = Vector2i(102, 94)
+custom_data_layer_0/name = "bomb"
+custom_data_layer_0/type = 1
+sources/1 = SubResource("TileSetAtlasSource_1ncv1")
+
+[node name="Master" type="Node2D"]
+script = ExtResource("1_imjb1")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -389.0
+offset_top = -187.0
+offset_right = 1670.0
+offset_bottom = 1023.0
+color = Color(0.288518, 0.288518, 0.288518, 1)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(54, 31)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_26eaa")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 359)
+zoom = Vector2(0.9, 0.9)
