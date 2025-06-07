@@ -3,7 +3,7 @@ extends Node2D
 var rowSize = 15
 var columnSize = 7
 
-@onready var masterScene = load("res://Master.tscn")
+@onready var masterScene = load("res://Scenes/Master.tscn")
 
 func _on_start_button_pressed():
 	var master = masterScene.instantiate()

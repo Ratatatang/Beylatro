@@ -17,7 +17,8 @@ const hexAdjacentsOdd = [
 	Vector2(-1, 1),
 	Vector2(-1, 0),
 	]
-
+	
+@onready var mainMenuScene = load("res://Scenes/MainMenu.tscn")
 @onready var hexmap = $TileMapLayer
 
 var rowSize = 15
@@ -50,9 +51,11 @@ func _process(delta):
 		$Camera2D.position += Vector2.DOWN * delta * 300
 
 func _input(event):
-	if(lost or won):
+	if(event.is_action_pressed("Restart")):
+		$"CanvasLayer/Restart Popup".visible = true
+	elif(lost or won):
 		return
-	if(event.is_action_pressed("lmb")):
+	if(event.is_action_pressed("lmb") && !$"CanvasLayer/Restart Popup".visible):
 		
 		var cell = Vector2(hexmap.local_to_map(hexmap.get_local_mouse_position()))
 		#print(cell)
@@ -101,7 +104,7 @@ func _input(event):
 				if(hexmap.get_cell_atlas_coords(mine) != Vector2i(1, 0)):
 					hexmap.set_cell(mine, 1, Vector2(1, 0))
 		
-	if(event.is_action_pressed("rmb")):
+	if(event.is_action_pressed("rmb") && !$"CanvasLayer/Restart Popup".visible):
 		var cell = Vector2(hexmap.local_to_map(hexmap.get_local_mouse_position()))
 		
 		if(revealedCells.has(cell) or !cells.keys().has(cell)):
@@ -194,3 +197,25 @@ func chainSafe(start : Vector2, chain = true):
 				revealedCells.append(hex)
 				
 			hexmap.set_cell(hex, 1, Vector2(adjacentMines - 1, 1))
+
+
+func _on_yes_restart_pressed():
+	$"CanvasLayer/Restart Popup".visible = false
+	$Camera2D.position = Vector2.ZERO
+	cells = {}
+	mineCells = []
+	revealedCells = []
+	firstHex = true
+	lost = false
+	won = false
+	$Background.color = Color("3f3f3f")
+	
+	generateHexBoard()
+
+
+func _on_quit_to_menu_pressed():
+	get_tree().root.add_child(mainMenuScene.instantiate())
+	queue_free()
+
+func _on_no_restart_pressed():
+	$"CanvasLayer/Restart Popup".visible = false

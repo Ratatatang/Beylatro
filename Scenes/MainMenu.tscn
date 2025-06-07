@@ -30,9 +30,9 @@ text = "START GAME"
 
 [node name="Title" type="RichTextLabel" parent="UI"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = -1
+anchor_left = 0.519965
+anchor_right = 0.519965
 offset_left = -576.0
 offset_right = 576.0
 offset_bottom = 159.0
