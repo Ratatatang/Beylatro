@@ -17,6 +17,15 @@ const hexAdjacentsOdd = [
 	Vector2(-1, 1),
 	Vector2(-1, 0),
 	]
+
+const numberCoordinates = {
+	1: Vector2(1,0),
+	2: Vector2(2, 0),
+	3: Vector2(0, 1),
+	4: Vector2(1, 1),
+	5: Vector2(2, 1),
+	6: Vector2(3, 0)
+}
 	
 @onready var mainMenuScene = load("res://Scenes/MainMenu.tscn")
 @onready var hexmap = $TileMapLayer
@@ -94,7 +103,7 @@ func _input(event):
 			$Background.color = Color.DARK_RED
 			
 			for mine in mineCells:
-				hexmap.set_cell(mine, 1, Vector2(2, 0))
+				hexmap.set_cell(mine, 1, Vector2(3, 1))
 		
 		if(revealedCells.size() >= (cells.size() - mineCells.size())):
 			won = true
@@ -102,24 +111,24 @@ func _input(event):
 			
 			for mine in mineCells:
 				if(hexmap.get_cell_atlas_coords(mine) != Vector2i(1, 0)):
-					hexmap.set_cell(mine, 1, Vector2(1, 0))
+					hexmap.set_cell(mine, 1, Vector2(4, 0))
 		
 	if(event.is_action_pressed("rmb") && !$"CanvasLayer/Restart Popup".visible):
 		var cell = Vector2(hexmap.local_to_map(hexmap.get_local_mouse_position()))
 		
 		if(revealedCells.has(cell) or !cells.keys().has(cell)):
 			return
-		if(hexmap.get_cell_atlas_coords(cell) == Vector2i(1, 0)):
-			hexmap.set_cell(cell, 1, Vector2(3, 0))
+		if(hexmap.get_cell_atlas_coords(cell) == Vector2i(4, 0)):
+			hexmap.set_cell(cell, 1, Vector2(4, 1))
 		else:
-			hexmap.set_cell(cell, 1, Vector2(1, 0))
+			hexmap.set_cell(cell, 1, Vector2(4, 0))
 			
 func generateHexBoard():
 	hexmap.clear()
 	
 	for x in range(rowSize):
 		for y in range(columnSize):
-			hexmap.set_cell(Vector2(x, y), 1, Vector2(3, 0))
+			hexmap.set_cell(Vector2(x, y), 1, Vector2(4, 1))
 			cells[Vector2(x, y)] = hexTypes.EMPTY
 	
 	var camera = $Camera2D
@@ -196,12 +205,12 @@ func chainSafe(start : Vector2, chain = true):
 			if(!revealedCells.has(hex)):
 				revealedCells.append(hex)
 				
-			hexmap.set_cell(hex, 1, Vector2(adjacentMines - 1, 1))
+			hexmap.set_cell(hex, 1, numberCoordinates.get(adjacentMines))
 
 
 func _on_yes_restart_pressed():
 	$"CanvasLayer/Restart Popup".visible = false
-	$Camera2D.position = Vector2.ZERO
+	#$Camera2D.position = Vector2.ZERO
 	cells = {}
 	mineCells = []
 	revealedCells = []
